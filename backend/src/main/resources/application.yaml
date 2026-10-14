@@ -1,0 +1,44 @@
+
+spring:
+  application:
+    name: llm-gateway
+
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/llm_gateway
+    username: gateway
+    password: ${SPRING_DATASOURCE_PASSWORD:gateway_local_dev}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: llm-gateway-usage
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+ollama:
+  base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+  model: ${OLLAMA_MODEL:qwen2.5:3b}
+
+gateway:
+  admin:
+    token: ${LLM_GATEWAY_ADMIN_TOKEN:}
+  rate-limit:
+    requests-per-minute: 10
+  prompt-cache:
+    ttl-minutes: 5
+  usage:
+    topic: usage-events
