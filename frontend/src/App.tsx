@@ -47,7 +47,7 @@ import {
   YAxis,
 } from "recharts";
 import "./App.css";
-
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/$/, "");
 const features = [
   {
     number: "01",
@@ -529,7 +529,7 @@ function PlaygroundPage() {
     setAnswer("");
 
     try {
-      const response = await fetch("/v1/chat", {
+        const response = await fetch(`${API_BASE_URL}/v1/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -646,7 +646,7 @@ function DashboardPage() {
     setError("");
 
     try {
-      const response = await fetch("/internal/analytics/summary", {
+      const response = await fetch(`${API_BASE_URL}/internal/analytics/summary`, {
         headers: { "X-Admin-Token": token.trim() },
       });
 
@@ -889,7 +889,7 @@ function ApiKeysPage() {
     setCopied(false);
 
     try {
-      const response = await fetch("http://localhost:8080/internal/api-keys", {
+      const response = await fetch(`${API_BASE_URL}/internal/api-keys`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
