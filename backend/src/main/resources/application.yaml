@@ -33,6 +33,15 @@ ollama:
   base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
   model: ${OLLAMA_MODEL:qwen2.5:3b}
 
+ai:
+  provider: ${AI_PROVIDER:ollama}
+
+groq:
+  base-url: https://api.groq.com/openai/v1
+  api-key: ${GROQ_API_KEY:}
+  model: ${GROQ_MODEL:openai/gpt-oss-20b}
+
+
 gateway:
   admin:
     token: ${LLM_GATEWAY_ADMIN_TOKEN:}
