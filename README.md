@@ -267,4 +267,5 @@ Potential next steps include:
 
 ## License
 
-Add a license file if you intend to distribute this project under an open-source license.
+its open to use for anyone
+
