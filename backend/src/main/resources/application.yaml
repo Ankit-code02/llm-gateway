@@ -1,11 +1,14 @@
 
+server:
+  port: ${PORT:8080}
+
 spring:
   application:
     name: llm-gateway
 
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5433/llm_gateway
-    username: gateway
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://127.0.0.1:5433/llm_gateway}
+    username: ${SPRING_DATASOURCE_USERNAME:gateway}
     password: ${SPRING_DATASOURCE_PASSWORD:gateway_local_dev}
 
   jpa:
@@ -15,11 +18,18 @@ spring:
 
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
+      host: ${SPRING_DATA_REDIS_HOST:127.0.0.1}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:}
+      ssl:
+        enabled: ${SPRING_DATA_REDIS_SSL_ENABLED:false}
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    properties:
+      security.protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+      sasl.mechanism: ${KAFKA_SASL_MECHANISM:SCRAM-SHA-256}
+      sasl.jaas.config: ${KAFKA_SASL_JAAS_CONFIG:}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -41,13 +51,22 @@ groq:
   api-key: ${GROQ_API_KEY:}
   model: ${GROQ_MODEL:openai/gpt-oss-20b}
 
-
 gateway:
+  setup:
+    enabled: ${GATEWAY_SETUP_ENABLED:false}
   admin:
     token: ${LLM_GATEWAY_ADMIN_TOKEN:}
+  cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:5173}
   rate-limit:
     requests-per-minute: 10
   prompt-cache:
     ttl-minutes: 5
   usage:
     topic: usage-events
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
